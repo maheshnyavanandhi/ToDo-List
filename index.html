@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Flow — Minimal To-Do List</title>
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <h1>Tasks</h1>
+      <p id="date-display" class="date-display"></p>
+    </header>
+
+    <div class="progress-bar-container">
+      <div class="progress-info">
+        <span id="progress-text">0 of 0 completed</span>
+        <span id="progress-percent">0%</span>
+      </div>
+      <div class="progress-track">
+        <div id="progress-fill" class="progress-fill"></div>
+      </div>
+    </div>
+
+    <form id="todo-form" class="todo-form">
+      <input 
+        type="text" 
+        id="todo-input" 
+        placeholder="Add a new task..." 
+        autocomplete="off"
+        required
+      >
+      <button type="submit" aria-label="Add task">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </button>
+    </form>
+
+    <div class="filter-bar">
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="active">Active</button>
+        <button class="filter-btn" data-filter="completed">Completed</button>
+      </div>
+      <button id="clear-completed-btn" class="clear-btn">Clear Completed</button>
+    </div>
+
+    <ul id="todo-list" class="todo-list"></ul>
+
+    <div id="empty-state" class="empty-state hidden">
+      <p>No tasks found. Add one above!</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
