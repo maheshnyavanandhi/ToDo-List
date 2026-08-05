@@ -1,64 +1,264 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Task Flow — Minimal To-Do List</title>
-  <link rel="icon" type="image/png" href="images/favicon.png">
-  <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-</head>
-<body>
-  <div class="app-container">
-    <header class="app-header">
-      <h1>Tasks</h1>
-      <p id="date-display" class="date-display"></p>
-    </header>
+:root {
+  --primary: #4F46E5;
+  --primary-hover: #4338CA;
+  --bg-color: #F3F4F6;
+  --surface: #FFFFFF;
+  --text-main: #111827;
+  --text-muted: #6B7280;
+  --border: #E5E7EB;
+  --success: #10B981;
+  --danger: #EF4444;
+}
 
-    <div class="progress-bar-container">
-      <div class="progress-info">
-        <span id="progress-text">0 of 0 completed</span>
-        <span id="progress-percent">0%</span>
-      </div>
-      <div class="progress-track">
-        <div id="progress-fill" class="progress-fill"></div>
-      </div>
-    </div>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-    <form id="todo-form" class="todo-form">
-      <input 
-        type="text" 
-        id="todo-input" 
-        placeholder="Add a new task..." 
-        autocomplete="off"
-        required
-      >
-      <button type="submit" aria-label="Add task">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="12" y1="5" x2="12" y2="19"></line>
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-        </svg>
-      </button>
-    </form>
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
 
-    <div class="filter-bar">
-      <div class="filter-buttons">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="active">Active</button>
-        <button class="filter-btn" data-filter="completed">Completed</button>
-      </div>
-      <button id="clear-completed-btn" class="clear-btn">Clear Completed</button>
-    </div>
+.app-container {
+  background-color: var(--surface);
+  width: 100%;
+  max-width: 480px;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  padding: 32px;
+  overflow: hidden;
+}
 
-    <ul id="todo-list" class="todo-list"></ul>
+.app-header h1 {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
 
-    <div id="empty-state" class="empty-state hidden">
-      <p>No tasks found. Add one above!</p>
-    </div>
-  </div>
+.date-display {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-top: 4px;
+  font-weight: 500;
+}
 
-  <script src="script.js"></script>
-</body>
-</html>
+.progress-bar-container {
+  margin: 24px 0;
+  padding: 16px;
+  background: #F9FAFB;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.progress-track {
+  height: 8px;
+  background-color: #E5E7EB;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #4F46E5, #8B5CF6);
+  border-radius: 4px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s ease;
+}
+
+.progress-fill.completed-all {
+  background: linear-gradient(90deg, #10B981, #34D399);
+}
+
+.todo-form {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.todo-form input {
+  flex: 1;
+  padding: 14px 16px;
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.todo-form input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.todo-form button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  width: 52px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.todo-form button:hover {
+  background-color: var(--primary-hover);
+}
+
+.todo-form button:active {
+  transform: scale(0.95);
+}
+
+.filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-btn, .clear-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover, .clear-btn:hover {
+  background-color: #F3F4F6;
+  color: var(--text-main);
+}
+
+.filter-btn.active {
+  background-color: #EEF2FF;
+  color: var(--primary);
+}
+
+.clear-btn:hover {
+  color: var(--danger);
+  background-color: #FEF2F2;
+}
+
+.todo-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s ease;
+}
+
+.todo-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-color: #D1D5DB;
+}
+
+.todo-item.completed .todo-text {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.custom-checkbox {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  margin-right: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.todo-item.completed .custom-checkbox {
+  background-color: var(--success);
+  border-color: var(--success);
+}
+
+.custom-checkbox svg {
+  color: white;
+  opacity: 0;
+  width: 16px;
+  height: 16px;
+  transition: opacity 0.2s ease;
+}
+
+.todo-item.completed .custom-checkbox svg {
+  opacity: 1;
+}
+
+.todo-text {
+  flex: 1;
+  font-size: 16px;
+  transition: color 0.2s ease;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: #D1D5DB;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+}
+
+.delete-btn:hover {
+  color: var(--danger);
+  background-color: #FEF2F2;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+.hidden {
+  display: none;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
